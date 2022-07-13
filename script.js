@@ -1,5 +1,13 @@
 function boxPaint(){
-    this.style.backgroundColor = 'black';
+    if(boxBackground == 'rgb'){
+        this.style.backgroundColor = 'blue';
+        var o = Math.round, r = Math.random, s = 255;
+        this.style.backgroundColor = 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+    };
+
+    if(boxBackground == 'black'){
+        this.style.backgroundColor = 'black';
+    };
 }
 
 function createSketch(gridSize = 16){
@@ -17,8 +25,6 @@ function createSketch(gridSize = 16){
             //creating and adding divs
             var div = document.createElement('div');
             div.classList.add('single-box');
-            div.style.height = `${Math.round(960/gridSize)}px`; //keeps 960px as max sketch height
-            div.style.width = `${Math.round(960/gridSize)}px`;  //keeps 960px as max width
             //div.textContent = (i); //adds number to box for understanding the positions
             div.addEventListener('mouseover',boxPaint);
             divColumn.appendChild(div);
@@ -29,12 +35,34 @@ function createSketch(gridSize = 16){
 };
 
 function gridSizeChange(){
-    const gridSize = prompt('Enter new grid size:');
+    
+    let gridSize;
+    do{
+        gridSize = +prompt('Set new grid size:');
+        console.log(typeof(gridSize));
+    }while(gridSize > 100 || gridSize < 1);
     createSketch(gridSize);
+}
+
+function changeBoxColor(){
+    
+    const boxColor = document.querySelector('#box-color');
+    
+    if(boxBackground == 'black'){
+        boxBackground = 'rgb';
+        boxColor.textContent = 'Change color to black';
+        
+    }else if(boxBackground == 'rgb'){
+        boxBackground = 'black';
+        boxColor.textContent = 'Change color to "rgb"';  
+    }
 }
 
 const gridSize = document.querySelector('#grid-size');
 gridSize.addEventListener('click', gridSizeChange);
 
+let boxBackground = "black";
+const boxColor = document.querySelector('#box-color');
+boxColor.addEventListener('click', changeBoxColor);
 
 createSketch();
